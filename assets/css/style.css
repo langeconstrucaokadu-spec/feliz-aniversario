@@ -145,7 +145,7 @@ h1 {
   text-align: center;
   background: linear-gradient(120deg, #f4dfc2, #fff4df);
   color: var(--ink);
-  overflow: auto;
+  overflow: scroll;
 }
 
 .paper--top {
