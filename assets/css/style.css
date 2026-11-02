@@ -12,7 +12,7 @@
   --ink: #552b43;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; background-color: #100a1c;}
 body {
   margin: 0;
   min-height: 100vh;
