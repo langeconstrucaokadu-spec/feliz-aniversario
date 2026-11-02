@@ -1007,3 +1007,75 @@ footer { text-align: center; padding: 18px 18px 28px; color: #bca5bb; font-size:
   max-width: 100%;
   height: auto;
 }
+
+
+
+/* ===== LIVRO SEM VIRADA 3D ===== */
+
+#book {
+  position: relative;
+  height: min(72vh, 760px);
+  min-height: 360px;
+}
+
+#book .sheet,
+#book .sheet.flipped {
+  position: absolute;
+  inset: 0;
+  display: none;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 0;
+  transform: none !important;
+  transform-style: flat;
+  transition: none;
+  filter: none;
+  perspective: none;
+  overflow: hidden;
+}
+
+#book .sheet.active-page {
+  display: block;
+}
+
+#book .sheet .face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transform: none !important;
+  overflow: hidden;
+  backface-visibility: visible;
+}
+
+#book .sheet .page-scroll {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  padding: 26px 19px 32px;
+}
+
+#book .sheet .face.no--scroll .page-scroll {
+  overflow: hidden;
+  touch-action: auto;
+}
+
+@media (max-width: 600px) {
+  #book {
+    height: 72vh;
+    min-height: 320px;
+    max-height: 720px;
+  }
+
+  #book .sheet .page-scroll {
+    padding: 22px 16px 28px;
+  }
+}
