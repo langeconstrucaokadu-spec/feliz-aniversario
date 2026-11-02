@@ -239,8 +239,28 @@ h1 {
 .surprise.show { display: block; }
 .big-heart { font-size: 48px; animation: pulse 1.8s infinite; }
 footer { text-align: center; padding: 18px 18px 28px; color: #bca5bb; font-size: 11px; }
-.petal { position: fixed; top: -30px; z-index: 50; pointer-events: none; animation: fall linear forwards; opacity: .85; }
-@keyframes fall { to { transform: translate3d(35px, 110vh, 0) rotate(620deg); opacity: 0; } }
+.petal {
+  position: fixed;
+  top: -30px;
+  z-index: 50;
+  pointer-events: none;
+  user-select: none;
+  animation: fall linear forwards;
+  opacity: 0.85;
+  will-change: transform, opacity;
+}
+
+@keyframes fall {
+  from {
+    transform: translate3d(0, -10px, 0) rotate(0deg);
+    opacity: 0.85;
+  }
+
+  to {
+    transform: translate3d(35px, 110vh, 0) rotate(620deg);
+    opacity: 0;
+  }
+}
 @keyframes appear { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulse {
    0% { transform: scale(1); }
