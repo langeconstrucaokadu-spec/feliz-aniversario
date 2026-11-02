@@ -16,6 +16,7 @@ const pageContents = originalSheets.flatMap((sheet) =>
   }))
 );
 
+
 book.innerHTML = "";
 const sheets = [];
 
@@ -23,55 +24,25 @@ pageContents.forEach((page, index) => {
   const sheet = document.createElement("article");
   sheet.className = "sheet";
   sheet.dataset.index = String(index);
-  sheet.style.zIndex = String(pageContents.length - index + 10);
 
+  const face = document.createElement("div");
+  face.className = `face front ${page.originalClass}`;
 
-const front = document.createElement("div");
-front.className = `face front ${page.originalClass}`;
+  const content = document.createElement("div");
+  content.className = "page-scroll";
+  content.innerHTML = page.html;
 
-const frontContent = document.createElement("div");
-frontContent.className = "page-scroll";
-frontContent.innerHTML = page.html;
-front.appendChild(frontContent);
+  face.appendChild(content);
 
-if (
-  index === 2 ||
-  index === 4 ||
-  index === 6 ||
-  index === 7 ||
-  index === 8
-) {
-  front.classList.add("paper--top");
-}
+  if ([2, 4, 6, 7, 8].includes(index)) {
+    face.classList.add("paper--top");
+  }
 
-if (index === 5 || index === 9 || index === 10) {
-  front.classList.add("no--scroll");
-}
+  if ([5, 9, 10].includes(index)) {
+    face.classList.add("no--scroll");
+  }
 
-const back = document.createElement("div");
-back.className = "face back";
-
-if (pageContents[index + 1]) {
-  back.classList.add(pageContents[index + 1].originalClass);
-
-  const backContent = document.createElement("div");
-  backContent.className = "page-scroll";
-  backContent.innerHTML = pageContents[index + 1].html;
-  back.appendChild(backContent);
-} else {
-  back.classList.add("paper");
-
-  const backContent = document.createElement("div");
-  backContent.className = "page-scroll";
-  backContent.innerHTML = `
-    <p class="page-kicker">Continua…</p>
-    <h2>O próximo capítulo</h2>
-    <p>A nossa história ainda está sendo escrita. ♡</p>
-  `;
-  back.appendChild(backContent);
-}
-
-  sheet.append(front, back);
+  sheet.appendChild(face);
   book.appendChild(sheet);
   sheets.push(sheet);
 });
@@ -81,25 +52,27 @@ const nextButton = document.querySelector("#next");
 const statusText = document.querySelector("#pageStatus");
 const progressBar = document.querySelector("#progressBar");
 const chapterButtons = [...document.querySelectorAll(".chapter-nav button")];
-const revealButton = document.querySelector("#revealSurprise");
+
 let pageIndex = 0;
 
 function updateBookUI() {
   sheets.forEach((sheet, index) => {
-    const flipped = index < pageIndex;
-    sheet.classList.toggle("flipped", flipped);
-    // Folhas ainda não viradas ficam à frente; as já viradas recuam.
-    sheet.style.zIndex = String(flipped ? index + 1 : sheets.length - index + 10);
+    sheet.classList.toggle("active-page", index === pageIndex);
+    sheet.setAttribute("aria-hidden", String(index !== pageIndex));
   });
 
-  progressBar.style.width = `${(pageIndex / (sheets.length - 1)) * 100}%`;
+  progressBar.style.width =
+    `${(pageIndex / Math.max(sheets.length - 1, 1)) * 100}%`;
+
   statusText.textContent = pageIndex === 0
-    ? "Toque na seta para abrir o livro. Cada toque vira uma página."
-    : `Página ${pageIndex + 1} de ${sheets.length} · toque nas setas para continuar`;
+    ? "Toque na seta para abrir o livro. Cada toque avança uma página."
+    : `Página ${pageIndex + 1} de ${sheets.length}`;
 
   chapterButtons.forEach((button) => {
-    const target = Number(button.dataset.page);
-    button.classList.toggle("active", target === chapterForPage(pageIndex));
+    button.classList.toggle(
+      "active",
+      Number(button.dataset.page) === chapterForPage(pageIndex)
+    );
   });
 }
 
@@ -114,13 +87,14 @@ function chapterForPage(index) {
 
 function nextPage() {
   if (pageIndex < sheets.length - 1) {
-    pageIndex += 1;
+    pageIndex++;
     updateBookUI();
   }
 }
+
 function previousPage() {
   if (pageIndex > 0) {
-    pageIndex -= 1;
+    pageIndex--;
     updateBookUI();
   }
 }
@@ -130,22 +104,33 @@ previousButton.addEventListener("click", previousPage);
 
 chapterButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const target = Number(button.dataset.page);
     const chapterPages = [0, 2, 4, 6, 8, 10];
-    pageIndex = Math.min(chapterPages[target] ?? target, sheets.length - 1);
+    const target = Number(button.dataset.page);
+
+    pageIndex = Math.min(
+      chapterPages[target] ?? target,
+      sheets.length - 1
+    );
+
     updateBookUI();
   });
 });
 
-// O botão da capa é reconstruído durante a montagem; delegação mantém o clique funcional.
 book.addEventListener("click", (event) => {
-  if (event.target.closest("#openBook")) nextPage();
+  if (event.target.closest("#openBook")) {
+    nextPage();
+  }
+
   if (event.target.closest("#revealSurprise")) {
-    const currentSurprise = event.target.closest(".face").querySelector("#surprise");
-    if (!currentSurprise) return;
-    currentSurprise.classList.toggle("show");
+    const face = event.target.closest(".face");
+    const surprise = face?.querySelector("#surprise");
+
+    if (!surprise) return;
+
+    surprise.classList.toggle("show");
+
     const button = event.target.closest("#revealSurprise");
-    button.textContent = currentSurprise.classList.contains("show")
+    button.textContent = surprise.classList.contains("show")
       ? "Fechar surpresa ♡"
       : "Abrir minha surpresa ♡";
   }
@@ -153,24 +138,10 @@ book.addEventListener("click", (event) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.target.matches("input, textarea, select")) return;
+
   if (event.key === "ArrowRight") nextPage();
   if (event.key === "ArrowLeft") previousPage();
 });
-
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (!reduceMotion) {
-  window.setInterval(() => {
-    const petal = document.createElement("span");
-    petal.className = "petal";
-    petal.textContent = Math.random() > 0.55 ? "✿" : "♡";
-    petal.style.left = `${Math.random() * 100}vw`;
-    petal.style.fontSize = `${12 + Math.random() * 15}px`;
-    petal.style.color = Math.random() > 0.5 ? "#f2b7c8" : "#f5d99a";
-    petal.style.animationDuration = `${7 + Math.random() * 7}s`;
-    document.body.appendChild(petal);
-    window.setTimeout(() => petal.remove(), 15000);
-  }, 1400);
-}
 
 updateBookUI();
 
