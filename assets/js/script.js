@@ -147,6 +147,35 @@ updateBookUI();
 
 
 /* ==========================================
+   ANIMAÇÃO DE FLORES E CORAÇÕES CAINDO
+   ========================================== */
+
+const reduceMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+if (!reduceMotion) {
+  window.setInterval(() => {
+    const petal = document.createElement("span");
+
+    petal.className = "petal";
+    petal.textContent = Math.random() > 0.55 ? "✿" : "♡";
+    petal.style.left = `${Math.random() * 100}vw`;
+    petal.style.fontSize = `${12 + Math.random() * 15}px`;
+    petal.style.color = Math.random() > 0.5 ? "#f2b7c8" : "#f5d99a";
+    petal.style.animationDuration = `${7 + Math.random() * 7}s`;
+
+    document.body.appendChild(petal);
+
+    window.setTimeout(() => {
+      petal.remove();
+    }, 15000);
+  }, 1400);
+}
+
+
+
+/* ==========================================
    INTRO DE ANIVERSÁRIO — MARIANY
    ========================================== */
 
