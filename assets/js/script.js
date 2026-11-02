@@ -25,27 +25,51 @@ pageContents.forEach((page, index) => {
   sheet.dataset.index = String(index);
   sheet.style.zIndex = String(pageContents.length - index + 10);
 
-  const front = document.createElement("div");
-  front.className = `face front ${page.originalClass}`;
-  front.innerHTML = page.html;
 
-  if (index === 2 || index === 4 || index === 6 || index === 7 || index === 8) {
+const front = document.createElement("div");
+front.className = `face front ${page.originalClass}`;
+
+const frontContent = document.createElement("div");
+frontContent.className = "page-scroll";
+frontContent.innerHTML = page.html;
+front.appendChild(frontContent);
+
+if (
+  index === 2 ||
+  index === 4 ||
+  index === 6 ||
+  index === 7 ||
+  index === 8
+) {
   front.classList.add("paper--top");
-  }
+}
 
-  if ( index === 5 || index === 9 || index === 10) {
+if (index === 5 || index === 9 || index === 10) {
   front.classList.add("no--scroll");
-  }
+}
 
-  const back = document.createElement("div");
-  back.className = "face back";
-  if (pageContents[index + 1]) {
-    back.classList.add(pageContents[index + 1].originalClass);
-    back.innerHTML = pageContents[index + 1].html;
-  } else {
-    back.classList.add("paper");
-    back.innerHTML = '<p class="page-kicker">Continua…</p><h2>O próximo capítulo</h2><p>A nossa história ainda está sendo escrita. ♡</p>';
-  }
+const back = document.createElement("div");
+back.className = "face back";
+
+if (pageContents[index + 1]) {
+  back.classList.add(pageContents[index + 1].originalClass);
+
+  const backContent = document.createElement("div");
+  backContent.className = "page-scroll";
+  backContent.innerHTML = pageContents[index + 1].html;
+  back.appendChild(backContent);
+} else {
+  back.classList.add("paper");
+
+  const backContent = document.createElement("div");
+  backContent.className = "page-scroll";
+  backContent.innerHTML = `
+    <p class="page-kicker">Continua…</p>
+    <h2>O próximo capítulo</h2>
+    <p>A nossa história ainda está sendo escrita. ♡</p>
+  `;
+  back.appendChild(backContent);
+}
 
   sheet.append(front, back);
   book.appendChild(sheet);
