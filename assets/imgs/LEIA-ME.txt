@@ -1,0 +1,1 @@
+Coloque aqui as fotos de vocês. O HTML espera foto-01.jpg e foto-02.jpg. Você pode alterar os caminhos no index.html.

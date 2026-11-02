@@ -1,0 +1,940 @@
+/* ==========================================
+   LIVRO DA MARIANY — experiência mobile-first
+   Ajuste as cores em :root e o efeito em .sheet.
+   ========================================== */
+:root {
+  --night: #160d27;
+  --plum: #281438;
+  --wine: #651f42;
+  --rose: #f2b7c8;
+  --gold: #f5d99a;
+  --paper: #fff4df;
+  --ink: #552b43;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #fff4f0;
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(ellipse at 50% 12%, #50305f 0%, transparent 42%),
+    radial-gradient(ellipse at 10% 80%, #451a3e 0%, transparent 40%),
+    linear-gradient(145deg, #100a1c, #24102c 55%, #120b20);
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  z-index: -1;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, #fff 99%, transparent),
+    radial-gradient(2px 2px at 80% 30%, #ffe6ad 99%, transparent),
+    radial-gradient(1px 1px at 65% 75%, #fff 99%, transparent);
+  background-size: 190px 190px, 270px 270px, 230px 230px;
+}
+.topbar {
+  width: min(100% - 28px, 460px);
+  margin: auto;
+  padding: 18px 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.brand { font-style: italic; color: var(--gold); font-size: 19px; text-decoration: none; }
+.top-note { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #e7cbd8; text-align: right; }
+.hero { text-align: center; padding: 22px 20px 8px; max-width: 480px; margin: auto; }
+.eyebrow { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+h1 {
+  font-size: clamp(31px, 9vw, 43px);
+  line-height: 1.08;
+  font-weight: normal;
+  font-style: italic;
+  margin: 12px auto;
+  text-shadow: 0 0 28px #d777aa44;
+}
+.hero > p:last-child { max-width: 360px; margin: 0 auto; color: #e8d6e3; line-height: 1.6; font-size: 14px; }
+
+.book-area {
+  width: 100%;
+  max-width: 480px;
+  margin: 24px auto 0;
+  padding: 0 9px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 6px;
+}
+.turn-btn {
+  width: 34px;
+  height: 42px;
+  border: 1px solid #eacb91;
+  background: #ffffff0b;
+  color: var(--gold);
+  border-radius: 22px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 30;
+  touch-action: manipulation;
+}
+.turn-btn:active { background: #b14c79; }
+.book-stage {
+  width: 100%;
+  height: min(70svh, 600px);
+  min-height: 455px;
+  max-height: 620px;
+  perspective: 1600px;
+  position: relative;
+  perspective-origin: 50% 50%;
+}
+.book {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 20px 22px #0007);
+}
+.book::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  background: linear-gradient(90deg, #2b0e23, #a96b47, #3d1630);
+  z-index: 40;
+  border-radius: 5px 0 0 5px;
+}
+.sheet {
+  position: absolute;
+  inset: 0 0 0 5px;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1), filter 1.2s ease;
+  border-radius: 3px 10px 10px 3px;
+  will-change: transform;
+  backface-visibility: hidden;
+  padding-top: 5rem;
+}
+.sheet.flipped { transform: rotateY(-180deg); filter: brightness(0.96);}
+.face {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  backface-visibility: hidden;
+  border: 1px solid #d5ad71;
+  border-radius: 3px 10px 10px 3px;
+  scrollbar-width: thin;
+  scrollbar-color: #d5ad71 #f5e6d2;
+}
+.front { background: linear-gradient(120deg, #fff8e8, #f3dfc3); color: var(--ink); }
+.back { transform: rotateY(180deg); }
+.paper {
+  padding: 26px 19px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(120deg, #f4dfc2, #fff4df);
+  color: var(--ink);
+  overflow: auto;
+}
+
+.paper--top {
+  justify-content: flex-start;
+}
+
+.no--scroll {
+  overflow: hidden;
+}
+
+.cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 26px 18px;
+  color: #ffe8bd;
+  border: 4px double #d8b36d;
+  background: radial-gradient(ellipse at center, #7c3157, #421b3d 60%, #25112d);
+  box-shadow: inset 0 0 45px #10071988;
+  overflow: hidden;
+}
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  border: 1px solid #d8b36d88;
+  pointer-events: none;
+}
+.cover-inner { position: relative; z-index: 1; }
+.ornament, .flourish { font-size: 25px; color: #bd6688; margin: 12px 0; }
+.cover .ornament { color: var(--gold); font-size: 31px; }
+.cover-label, .dedication { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+.cover h2 { font-size: clamp(30px, 8vw, 39px); font-weight: normal; font-style: italic; line-height: 1.13; margin: 13px 0; }
+.cover-subtitle { color: #f4d9e5; font-style: italic; font-size: 16px; line-height: 1.7; }
+.open-book, .reveal-btn {
+  font-family: inherit;
+  margin-top: 13px;
+  border: 1px solid var(--gold);
+  border-radius: 24px;
+  padding: 10px 17px;
+  background: #ffffff12;
+  color: #ffeac9;
+  cursor: pointer;
+}
+#revealSurprise {
+  background-color: var(--plum);
+}
+.open-book:active, .reveal-btn:active { background: #b14c79; }
+.page-kicker { font-size: 9px; text-transform: uppercase; letter-spacing: .19em; color: #a56b83; margin: 0 0 9px; }
+.paper h2 { font-weight: normal; font-size: clamp(24px, 6vw, 30px); font-style: italic; line-height: 1.12; margin: 5px 0 13px; }
+.paper p { font-size: 14px; line-height: 1.68; max-width: 440px; margin: 7px auto; }
+.page-number { display: block; margin: 18px 0 0; bottom: 3px; text-align: center; font-size: 10px; color: #a88783; }
+.photo-frame {
+  width: min(100%, 300px);
+  height: 150px;
+  flex: 0 0 auto;
+  border: 1px dashed #bc8b9f;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #f4dce4, #f9eddb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 9px auto;
+}
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+.photo-placeholder { display: none; color: #86546d; font-size: 13px; line-height: 1.5; padding: 12px; }
+.photo-caption { color: #98677c; font-size: 12px !important; font-style: italic; }
+.songs { display: grid; width: 100%; max-width: 360px; margin-top: 8px; justify-items: center;}
+.song { text-align: left; width: 100%;}
+.song strong { display: block; font-size: 13px; font-weight: normal; }
+.song small { display: block; color: #8d6877; margin-top: 3px; font-size: 11px; }
+.song .player { max-width: 70%; }
+.music-note { font-size: 11px !important; color: #8d6877; }
+.signature { color: #9a3f67; font-style: italic; }
+.controls-note { text-align: center; color: #d7bfd0; font-size: 11px; line-height: 1.5; margin: 12px auto 0; padding: 0 18px; max-width: 440px; }
+.progress { width: min(330px, 72%); height: 3px; background: #ffffff1b; margin: 16px auto 0; border-radius: 10px; overflow: hidden; }
+.progress span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #c96b9a, #f4d99b); transition: width .5s; }
+.chapter-nav { display: flex; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; gap: 7px; margin: 17px auto 34px; padding: 0 14px 8px; max-width: 480px; scrollbar-width: none; }
+.chapter-nav::-webkit-scrollbar { display: none; }
+.chapter-nav button { flex: 0 0 auto; font-family: inherit; border: 1px solid #d6b77c; color: #ffeac9; background: #ffffff0b; padding: 9px 12px; border-radius: 25px; font-size: 12px; cursor: pointer; }
+.chapter-nav button.active { background: #b14c79; color: white; }
+.section { width: min(440px, 90%); margin: 0 auto 45px; padding: 24px 0; text-align: center; border-top: 1px solid #d5b37555; }
+.letter { background: linear-gradient(135deg, #fff4df, #f0d8c1); color: var(--ink); padding: 24px 20px; border-radius: 8px; box-shadow: 0 18px 45px #0003; text-align: left; line-height: 1.8; font-size: 14px; }
+.letter h2 { text-align: center; color: #873e5e; font-weight: normal; font-style: italic; }
+.surprise { display: none; animation: appear .8s ease both; }
+.surprise.show { display: block; }
+.big-heart { font-size: 48px; animation: pulse 1.8s infinite; }
+footer { text-align: center; padding: 18px 18px 28px; color: #bca5bb; font-size: 11px; }
+.petal { position: fixed; top: -30px; z-index: 50; pointer-events: none; animation: fall linear forwards; opacity: .85; }
+@keyframes fall { to { transform: translate3d(35px, 110vh, 0) rotate(620deg); opacity: 0; } }
+@keyframes appear { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse {
+   0% { transform: scale(1); }
+   50% { transform: scale(1.12); }
+   100% { transform: scale(1); }
+  }
+@media (max-height: 740px) {
+  .book-stage { height: 66svh; min-height: 390px; }
+  .paper { padding-top: 18px; padding-bottom: 26px; }
+  .paper p { font-size: 13px; line-height: 1.55; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 6.01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+
+/* ==========================================
+   INTRO DE ANIVERSÁRIO — MARIANY
+   ========================================== */
+
+
+/* ===== INTRO ANIMADA DE ANIVERSÁRIO ===== */
+
+.birthday-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 28px 20px;
+  background: #160e1b;
+  color: #fff5f8;
+  opacity: 1;
+  visibility: visible;
+  isolation: isolate;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+}
+
+.birthday-intro::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -30%;
+  background: radial-gradient(
+    circle,
+    rgba(218, 112, 165, 0.35),
+    rgba(83, 37, 78, 0.2) 35%,
+    transparent 65%
+  );
+  animation: introGlow 6s ease-in-out infinite alternate;
+}
+
+.birthday-intro.is-closing {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.birthday-content {
+  width: min(100%, 520px);
+  margin: auto;
+  text-align: center;
+  animation: introContent 1.3s ease-out both;
+}
+
+.birthday-label {
+  display: block;
+  margin-bottom: 20px;
+  color: #f5c6db;
+  font-size: 10px;
+  letter-spacing: 3px;
+  opacity: 0;
+  animation: introReveal 0.8s ease-out 0.5s forwards;
+}
+
+.birthday-heart {
+  margin: 10px 0 20px;
+  color: #ffe1ed;
+  font-family: Georgia, serif;
+  font-size: clamp(90px, 20vw, 140px);
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.1);
+  text-shadow: 0 0 20px #ff85b9, 0 0 60px #e94d9b;
+  animation:
+    heartPop 1.3s cubic-bezier(.17,.89,.32,1.4) 0.6s forwards,
+    heartBeat 1.8s ease-in-out 2s infinite;
+}
+
+.birthday-content h1 {
+  margin: 0 auto 20px;
+  color: #ffe0ec;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 6vw, 48px);
+  font-weight: normal;
+  line-height: 1.2;
+  opacity: 0;
+  animation: introReveal 1s ease-out 1.4s forwards;
+}
+
+.birthday-message,
+.birthday-dedication,
+.birthday-signature {
+  opacity: 0;
+  animation: introReveal 1s ease-out forwards;
+}
+
+.birthday-message {
+  max-width: 420px;
+  margin: 0 auto 18px;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  animation-delay: 1.8s;
+}
+
+.birthday-dedication {
+  max-width: 410px;
+  margin: 0 auto 20px;
+  color: #ead9e5;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  line-height: 1.9;
+  white-space: pre-line;
+  animation-delay: 2.2s;
+}
+
+.birthday-signature {
+  margin: 0 0 28px;
+  color: #f5bfd2;
+  font-family: Georgia, serif;
+  font-style: italic;
+  animation-delay: 2.6s;
+}
+
+.birthday-button {
+  padding: 15px 28px;
+  border: 1px solid #ffe0eb;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ffe0e9, #df9bbc);
+  color: #40223a;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(255, 180, 215, 0);
+  opacity: 0;
+  animation: buttonAppear 0.9s ease-out 3s forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.birthday-button:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 0 28px rgba(255, 180, 215, 0.4);
+}
+
+/* Corações flutuantes */
+
+.birthday-hearts {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.birthday-hearts span {
+  position: absolute;
+  bottom: -60px;
+  color: #ffb9d5;
+  font-size: 24px;
+  opacity: 0;
+  text-shadow: 0 0 12px #ff8fbd;
+  animation: floatingHeart 8s linear infinite;
+}
+
+.birthday-hearts span:nth-child(1) { left: 7%; animation-delay: 0s; }
+.birthday-hearts span:nth-child(2) { left: 19%; animation-delay: 2s; }
+.birthday-hearts span:nth-child(3) { left: 34%; animation-delay: 4s; }
+.birthday-hearts span:nth-child(4) { left: 49%; animation-delay: 1s; }
+.birthday-hearts span:nth-child(5) { left: 64%; animation-delay: 3s; }
+.birthday-hearts span:nth-child(6) { left: 77%; animation-delay: 5s; }
+.birthday-hearts span:nth-child(7) { left: 87%; animation-delay: 2.5s; }
+.birthday-hearts span:nth-child(8) { left: 95%; animation-delay: 4.5s; }
+
+/* Sequência de animações */
+
+@keyframes introGlow {
+  from { transform: scale(0.8); opacity: 0.45; }
+  to { transform: scale(1.25); opacity: 1; }
+}
+
+@keyframes introContent {
+  from { opacity: 0; transform: translateY(35px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes introReveal {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartPop {
+  0% { opacity: 0; transform: scale(0.1) rotate(-20deg); }
+  65% { opacity: 1; transform: scale(1.2) rotate(8deg); }
+  82% { transform: scale(0.92) rotate(-3deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes heartBeat {
+  0%, 100% { text-shadow: 0 0 20px #ff85b9, 0 0 60px #e94d9b; }
+  50% { text-shadow: 0 0 35px #ffe1ed, 0 0 90px #ff62ad; }
+}
+
+@keyframes buttonAppear {
+  from { opacity: 0; transform: translateY(18px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes floatingHeart {
+  0% { opacity: 0; transform: translateY(0) rotate(0); }
+  15% { opacity: 0.8; }
+  85% { opacity: 0.65; }
+  100% { opacity: 0; transform: translateY(-115vh) rotate(35deg); }
+}
+
+@media (max-width: 480px) {
+  .birthday-message { font-size: 16px; }
+  .birthday-dedication { font-size: 13px; }
+  .birthday-button { padding: 14px 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-intro::before,
+  .birthday-content,
+  .birthday-label,
+  .birthday-heart,
+  .birthday-content h1,
+  .birthday-message,
+  .birthday-dedication,
+  .birthday-signature,
+  .birthday-button,
+  .birthday-hearts span {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+/* TESTE: FORÇAR A ANIMAÇÃO DA INTRO */
+
+#birthday-intro .birthday-content {
+  animation: introContent 1.3s ease-out 0.25s both !important;
+}
+
+#birthday-intro .birthday-label {
+  animation: introReveal 0.8s ease-out 0.5s both !important;
+}
+
+#birthday-intro .birthday-heart {
+  animation:
+    heartPop 1.3s ease-out 0.6s both,
+    heartBeat 1.8s ease-in-out 2s infinite !important;
+}
+
+#birthday-intro h1 {
+  animation: introReveal 1s ease-out 1.4s both !important;
+}
+
+#birthday-intro .birthday-button {
+  animation: buttonAppear 0.9s ease-out 3s both !important;
+}
+
+#birthday-intro .birthday-hearts span {
+  animation: floatingHeart 8s linear infinite !important;
+}
+
+
+
+/* ==========================================
+   EFEITOS MÁGICOS — PRESENTE DA MARIANY
+   ========================================== */
+
+/* Brilho dourado no fundo */
+#birthday-intro::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(255, 220, 157, 0.18),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(255, 183, 214, 0.16),
+      transparent 30%
+    );
+
+  animation: magicalBackground 7s ease-in-out infinite alternate;
+}
+
+/* Coração com brilho dourado */
+#birthday-intro .birthday-heart {
+  filter: drop-shadow(0 0 12px rgba(255, 203, 139, 0.45));
+}
+
+/* Brilho delicado no título */
+#birthday-intro h1 {
+  text-shadow:
+    0 0 12px rgba(255, 208, 228, 0.15),
+    0 0 35px rgba(245, 183, 213, 0.12);
+}
+
+/* Partículas e pétalas */
+#birthday-intro .birthday-hearts span:nth-child(odd) {
+  color: #ffe2ac;
+}
+
+#birthday-intro .birthday-hearts span:nth-child(even) {
+  color: #ffc4dc;
+}
+
+#birthday-intro .birthday-hearts span {
+  filter: drop-shadow(0 0 7px rgba(255, 213, 170, 0.65));
+}
+
+/* Botão com brilho pulsante */
+#birthday-intro .birthday-button {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 18px rgba(255, 194, 218, 0.2),
+    0 0 35px rgba(255, 215, 160, 0.1);
+  animation:
+    buttonAppear 0.9s ease-out 3s both,
+    magicalButtonGlow 2.5s ease-in-out 4s infinite !important;
+}
+
+#birthday-intro .birthday-button::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -80%;
+  width: 45%;
+  height: 200%;
+  transform: rotate(25deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+  animation: buttonShimmer 4s ease-in-out 4s infinite;
+  pointer-events: none;
+}
+
+/* Animações mágicas */
+@keyframes magicalBackground {
+  from {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes magicalButtonGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 18px rgba(255, 194, 218, 0.2),
+      0 0 35px rgba(255, 215, 160, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(255, 194, 218, 0.48),
+      0 0 48px rgba(255, 215, 160, 0.28);
+  }
+}
+
+@keyframes buttonShimmer {
+  0%, 65% {
+    left: -80%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+/* Respeita a preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  #birthday-intro::after,
+  #birthday-intro .birthday-button,
+  #birthday-intro .birthday-button::before {
+    animation: none !important;
+  }
+}
+
+
+
+/* Saída suave ao abrir o presente */
+#birthday-intro.is-closing {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.035);
+  filter: blur(5px);
+  transition:
+    opacity 1.2s ease,
+    visibility 1.2s ease,
+    transform 1.2s ease,
+    filter 1.2s ease;
+}
+
+
+
+/* ==========================================
+   PLAYER ROMÂNTICO — LIVRO DA MARIANY
+   ========================================== */
+
+.music-player {
+  --music-wine: #55263f;
+  --music-rose: #e8b2c9;
+  --music-gold: #d9b879;
+  --music-cream: #fff6f0;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  width: 100%;
+  max-width: 480px;
+  margin: 20px auto;
+  padding: 17px;
+
+  color: var(--music-cream);
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(232, 178, 201, 0.13),
+      transparent 55%
+    ),
+    linear-gradient(135deg, #472238, #291823);
+
+  border: 1px solid rgba(217, 184, 121, 0.55);
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 28px rgba(40, 15, 31, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  box-sizing: border-box;
+}
+
+.music-player *,
+.music-player *::before,
+.music-player *::after {
+  box-sizing: border-box;
+}
+
+.music-player .music-audio {
+  display: none;
+}
+
+.music-cover {
+  display: flex;
+  flex: 0 0 58px;
+  align-items: center;
+  justify-content: center;
+
+  width: 58px;
+  height: 58px;
+
+  border: 1px solid rgba(255, 230, 192, 0.7);
+  border-radius: 14px;
+
+  background: linear-gradient(145deg, #d7a5bd, #8d4c70);
+
+  color: #fff5ed;
+  font-family: Georgia, serif;
+  font-size: 32px;
+
+  box-shadow: 0 0 18px rgba(217, 184, 121, 0.12);
+}
+
+.music-player.is-playing .music-cover {
+  animation: musicCoverGlow 2.5s ease-in-out infinite;
+}
+
+.music-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.music-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.music-text {
+  min-width: 0;
+}
+
+.music-title {
+  margin: 0;
+  color: #fff0f5;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.music-subtitle {
+  margin: 4px 0 10px;
+  color: #dfc4d1;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.music-heart {
+  flex: 0 0 auto;
+  color: var(--music-gold);
+  font-size: 17px;
+  opacity: 0.9;
+}
+
+.music-player.is-playing .music-heart {
+  animation: musicHeartBeat 1.3s ease-in-out infinite;
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.music-play {
+  display: flex;
+  flex: 0 0 39px;
+  align-items: center;
+  justify-content: center;
+
+  width: 39px;
+  height: 39px;
+  padding: 0;
+
+  border: 1px solid rgba(255, 235, 215, 0.7);
+  border-radius: 50%;
+
+  background: linear-gradient(145deg, #f2d1dd, #dba4bd);
+  color: var(--music-wine);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.music-play:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 15px rgba(232, 178, 201, 0.28);
+}
+
+.music-play:focus-visible,
+.music-progress:focus-visible {
+  outline: 2px solid var(--music-gold);
+  outline-offset: 4px;
+}
+
+.music-play-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.music-timeline {
+  flex: 1;
+  min-width: 0;
+}
+
+.music-progress {
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: 0;
+  border-radius: 99px;
+
+  background: #79566b;
+  cursor: pointer;
+}
+
+.music-progress::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: 2px solid #fff2e7;
+  border-radius: 50%;
+  background: var(--music-gold);
+
+  box-shadow: 0 0 7px rgba(217, 184, 121, 0.4);
+}
+
+.music-progress::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+
+  border: 2px solid #fff2e7;
+  border-radius: 50%;
+  background: var(--music-gold);
+
+  box-shadow: 0 0 7px rgba(217, 184, 121, 0.4);
+}
+
+.music-time {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+
+  color: #e0cbd5;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes musicCoverGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(217, 184, 121, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(217, 184, 121, 0.4);
+  }
+}
+
+@keyframes musicHeartBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+@media (max-width: 420px) {
+  .music-player {
+    gap: 11px;
+    padding: 13px;
+    border-radius: 15px;
+  }
+
+  .music-cover {
+    flex-basis: 46px;
+    width: 46px;
+    height: 46px;
+    font-size: 26px;
+  }
+
+  .music-title {
+    font-size: 14px;
+  }
+
+  .music-subtitle {
+    font-size: 10px;
+  }
+
+  .music-controls {
+    gap: 9px;
+  }
+
+  .music-play {
+    flex-basis: 35px;
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-player.is-playing .music-cover,
+  .music-player.is-playing .music-heart {
+    animation: none;
+  }
+
+  .music-play {
+    transition: none;
+  }
+}
