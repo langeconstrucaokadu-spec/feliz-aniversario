@@ -958,3 +958,38 @@ footer { text-align: center; padding: 18px 18px 28px; color: #bca5bb; font-size:
   max-width: 100%;
   height: auto;
 }
+
+/* A folha continua responsável pela animação de virar */
+.sheet .face {
+  overflow: hidden;
+}
+
+/* Área interna que pode rolar com o dedo */
+.sheet .face .page-scroll {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 26px 19px 32px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: #d5ad71 #f5e6d2;
+}
+
+/* Páginas que devem ficar sem rolagem */
+.sheet .face.no--scroll .page-scroll {
+  overflow: hidden;
+  touch-action: auto;
+}
+
+/* Conteúdo em formato de papel */
+.sheet .face.paper .page-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
