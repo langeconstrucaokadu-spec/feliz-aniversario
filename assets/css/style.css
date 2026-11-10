@@ -1034,7 +1034,7 @@ footer { text-align: center; padding: 18px 18px 28px; color: #bca5bb; font-size:
 
 #book {
   position: relative;
-  height: min(72vh, 760px);
+  height: 100%;
   min-height: 360px;
 }
 
@@ -1098,4 +1098,9 @@ footer { text-align: center; padding: 18px 18px 28px; color: #bca5bb; font-size:
   #book .sheet .page-scroll {
     padding: 22px 16px 28px;
   }
+}
+
+
+.sheet .face .page-scroll .photo-frame.pe {
+  height: auto;
 }
